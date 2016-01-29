@@ -79,7 +79,9 @@
 
 ;------------------------------TASK 3---------------------------------
 
-
+(define (mandelbot-iter thresh)
+	(define (tester x y)
+		(define ())))
 
 
 
@@ -88,17 +90,42 @@
 
 ;--------------------------------TASK 4-------------------------------
 
+(define (average x y) 
+	(/ (+ x y) 2.0))
+
+(define (square x) (* x x))
+
+(define (root3 x)
+
+	(define (binaryAlg f firstGuess)
+		(define (checkGuess guess)
+			(let ((next (f guess)))
+				(if (= guess next)
+					next
+					;(println "next: " next)
+					(checkGuess next)
+					) ; end if
+				) ; end let
+			) ; end checkGuess
+		(checkGuess firstGuess))
+
+	(define (average-damp f)
+		(lambda (x) (average x (f x))))
+
+	(binaryAlg (average-damp (lambda (y) (/ (+ (/ x (square y) )(* 2 y) ) 3 ) ) ) 1.0)
+	)
+
+
+(define (run4)
+	(inspect (root3 2))
+	(inspect (root3 5.05))
+	(inspect (root3 8.00))
+	(inspect (root3 100))
+	)
 
 
 
-
-
-
-
-
-
-
-
+(run4)
 
 
 ;--------------------------------TASK 5-------------------------------
@@ -139,7 +166,7 @@
  	)
 
 
-(run5)
+;(run5)
 
 
 ;--------------------------------TASK 6-------------------------------
