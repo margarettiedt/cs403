@@ -125,7 +125,7 @@
 
 
 
-(run4)
+;(run4)
 
 
 ;--------------------------------TASK 5-------------------------------
@@ -143,6 +143,9 @@
 
  	(define (iterateRow ro)
 
+ 		(define diff (- n ro))
+ 		(printHelper diff)
+
  		(define (iterateCol c)
  			(cond
  				((<= c ro) (print (helper ro c) " ") (iterateCol (+ c 1)))
@@ -153,6 +156,12 @@
  			((< ro n) (iterateCol 0) (println) (iterateRow (+ ro 1)))
  			)	
 
+ 		)
+
+ 	(define (printHelper x)
+ 		(cond 
+ 			((>= x 0) (print " ") (printHelper (- x 1)) )
+ 			)
  		)	
 
  	(iterateRow 0)
@@ -166,7 +175,7 @@
  	)
 
 
-;(run5)
+(run5)
 
 
 ;--------------------------------TASK 6-------------------------------
