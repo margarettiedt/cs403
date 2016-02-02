@@ -79,25 +79,34 @@
 
 ;------------------------------TASK 3---------------------------------
 
-(define (mandelbot-iter thresh)
-	(define tester (mandelbot-iter j))
-		(cond
-			(if (= (tester x y) 0)
-				(print "point (" x "," y ") is in the Mandelbrot set!\n")
-				(print "point (" x "," y ") is NOT in the Mandelbrot set.\n")
-				)
-			)
-	(lambda (x) (y)
+(define (square x) (* x x)) ; calculates the square of a number
 
-		)
+(define (mandelbrot-iter thresh)
+	(lambda (x y) 
+		(define (tester count r s)
+			(define rEquation (+ (- (square r) (square s) )x ))
+			(define sEquation  (+ (* 2 r s) y))
+
+			(cond
+				((> (+ (square rEquation) (square sEquation)) 4) (+ count 1))
+				((= count thresh) 0)
+				(else
+					(tester (+ count 1) rEquation sEquation)
+					) ;end else
+				) ;end cond
+
+			) ;end tester
+
+		(tester 0 0.0 0.0) ;inital call
+
+		) ;ends lambda
 
 		;(define r ( + ( - (* r r) (*s s)) x ))
 		;(define s (+ (* 2 r s) y) )
-		(if(> (+ (square (+ (- (square r) (square s) )x ) )) (square (+ (* 2 r s) y)) 4) "not in set")
-		(else ())
+		;(if(> (+ (square (+ (- (square r) (square s) )x ) )) (square (+ (* 2 r s) y)) 4) "not in set")
+		;(else ())
 
-
-		)
+	) ;end mandel-iter
 
 (define (run3)
 	(exprTest ((mandelbrot-iter 100) 2 2) 1)
@@ -121,8 +130,6 @@
 
 (define (average x y) ; basic function to calculate average of two numbers
 	(/ (+ x y) 2.0))
-
-(define (square x) (* x x)) ; calculates the square of a number
 
 (define (root3 x)
 
