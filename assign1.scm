@@ -14,7 +14,7 @@
 
 ;------------------------------TASK 1---------------------------------
 
-(define (my-if a b c)
+(define (my-if a b c) ;my-if given to us in task prompt
 	(if (true? a)
 		b
 		c
@@ -28,14 +28,8 @@
  (define (run1)
  	(define x 0)
  	(define a 0)
-	(println "")
- 	(println " -------------Test 1------------")
-	(println "")
-	;(println "when a=0 and x=0... my-if does not behave like if (like expected)")
- 	;(println "if statement results: ")
-	;(inspect (if (= a 0) x (/ a x)))
-	;(println "my-if results: ")
-	;(inspect (my-if (= a 0) x (/ a x)))
+	(exprTest(if (= a 0) x (/ a x)) 0)
+	(exprTest(my-if (= a 0) x (/ a x)) "divide by 0 error")
 	)
 
 ;(run1)
@@ -43,20 +37,27 @@
 
 ;------------------------------TASK 2---------------------------------
 
+; Computes a price of a ticket for Zeno Airlines using a recursive process
+; d = distance of flight in stadia, c = cost of first half of trip in drachma, f= cost factor
+; The function zeno_cost takes in a d, c, f and uses zHelp to recursively
+; 		keep track of the totalCost and update the remaining distance and new cost.
+
+
+
 (define (zeno_cost d c f)
-	(define daktylos (/ 1.0 9600.0))
-	(define hemibool (/ 1.0 12.0))
+	(define daktylos (/ 1.0 9600.0)) ;given by definition in prompt
+	(define hemibool (/ 1.0 12.0)) ;also given by definition in prompt
 
 	(define (zHelp totalCost d c)
 		(cond
-			((<= d daktylos) (+ totalCost 7.0))
-			((<= c hemibool) (+ totalCost hemibool))
-			(else (zHelp (+ totalCost c) (/ d 2.0) (* c f)))
+			((<= d daktylos) (+ totalCost 7.0)) ; when the d gets this small, add 7 to cost and end recursion
+			((<= c hemibool) (+ totalCost hemibool))  ; when cost gets this small, add a hemibool and end recursion
+			(else (zHelp (+ totalCost c) (/ d 2.0) (* c f))) ; call zHelp again with updated variables
 			)
 
 		) ; end help
 
-	(zHelp 0.0 d c)
+	(zHelp 0.0 d c) ; first call to zHelp, starts totalCost at 0
 
 	) ; end zeno_cost
 
@@ -86,10 +87,13 @@
 				(print "point (" x "," y ") is NOT in the Mandelbrot set.\n")
 				)
 			)
+	(lambda (x) (y)
 
-		(define r ( + ( - (* r r) (*s s)) x ))
-		(define s (+ (* 2 r s) y) )
-		(if(> ( + (* r r) (*s s)) 4) "not in set")
+		)
+
+		;(define r ( + ( - (* r r) (*s s)) x ))
+		;(define s (+ (* 2 r s) y) )
+		(if(> (+ (square (+ (- (square r) (square s) )x ) )) (square (+ (* 2 r s) y)) 4) "not in set")
 		(else ())
 
 
@@ -110,11 +114,7 @@
 	(exprTest ((mandelbrot-iter 100) .363 .36) 93)
 	)
 
-
-
-
-
-
+;(run3)
 
 
 ;--------------------------------TASK 4-------------------------------
@@ -142,7 +142,7 @@
 
 	(binaryAlg (average-damp (lambda (y) (/ (+ (/ x (square y) )(* 2 y) ) 3 ) ) ) 1.0)
 	; The above statement uses Newton's Method for cube roots to estimate our answers! 
-	)
+	) ;end root3
 
 ; run function for root3
 (define (run4)
@@ -169,7 +169,7 @@
 
  	(define (iterateRow ro) ;function to recursively iterate through the rows
  		;(define diff (- n ro)) ; difference in depth and current row
- 		(printHelper (-n ro)) 
+ 		(printHelper (- n ro)) 
  		(define (iterateCol c) ;function to recursively iterate through the columns
  			(cond
  				((<= c ro) (print (crazyTriangleHelper ro c) " ") (iterateCol (+ c 1)))
@@ -190,33 +190,30 @@
  	(iterateRow 0) ;initial call to start iteration
 	) ;end crazyTriangle
 
-
 (define (run5)
 	(inspect (crazyTriangle 1 1 6))
 	(inspect (crazyTriangle 1 2 6))
 	(inspect (crazyTriangle 1 1 13))
  	) ;end run5
 
-
 ;(run5)
 
 
 ;--------------------------------TASK 6-------------------------------
 
-(define (oppy oper1)
-	(lambda (var1)
-		(lambda (oper2)
-			(lambda (var2)
-				(lambda (var3) (oper1 var1 (oper2 var2 var3))
+(define (oppy operator1)
+	(lambda (variable1)
+		(lambda (operator2)
+			(lambda (variable2)
+				(lambda (variable3) (operator1 variable1 (operator2 variable2 variable3))
 					)
 				)
 			)
 		)
-
 	)
 
 (define (run6)
-	(inspect (((((oppy +) 9) *) 7) 5))
+	(exprTest (((((oppy +) 1) +) 1) 1) 3)
 	(exprTest (((((oppy +) 9) *) 7) 5) 0)
 	(exprTest (((((oppy *) 3) +) 5) 4) 27)
 	(exprTest (((((oppy *) 6) -) -7) 2) -54)
@@ -236,8 +233,8 @@
 
 ;--------------------------------TASK 7---------------------
 
-(define (shank f i)
-	(define (w)
+(define (w f i)
+	(define (wHelper)
 		(cond
 			((= i 0) (f i))
 			(else 
@@ -255,20 +252,20 @@
 				(/ numerator denominator) ; return this statement!
 				) ; end big else
 			) ; end cond
-		); end w
+		); end wHelper
 
-		(w) 
+		(wHelper) 
 
 	) ; end shank
 
 (define (run7)
-	(inspect(shank (lambda (x) x) 5))
-	(exprTest (shank square 0) 0) ; the 'problem' functions
-	(exprTest (shank square 15.0) -618.06451613) ; the 'problem' functions
-	(exprTest (shank square 1000) 503389) ; the 'problem' functions
-	(exprTest (shank sqrt 10000) -1333433.5623)
-	(exprTest (shank sqrt 15.0) -81.498536939)
-	(exprTest (shank sqrt 0) 0.0)
+	(inspect(w (lambda (x) x) 5))
+	(exprTest (w square 0) 0) ; the 'problem' functions
+	(exprTest (w square 15.0) -618.06451613) ; the 'problem' functions
+	(exprTest (w square 1000) 503389) ; the 'problem' functions
+	(exprTest (w sqrt 10000) -1333433.5623)
+	(exprTest (w sqrt 15.0) -81.498536939)
+	(exprTest (w sqrt 0) 0.0)
 	)
 
 ;(run7)
@@ -288,7 +285,6 @@
 	(define (egyptHelp2 a b c d)
 		(cond
 			((= b 0) d)
-			;((<= a b) (egyptHelp2 (/ a 2) (- b a) (/ c 2) (+ d c)))
 			((<= a b) (egyptHelp2 (halve a) (- b a) (halve c) (+ d c)))
 			(else (egyptHelp2 (/ a 2) b (/ c 2) d))
 			)
@@ -340,23 +336,23 @@
 					(else (mysteryHelper (- n 1) (/ 1.0 (+ 1.0 total))))
 					)
 				) 
-			)
-		;(println "total: " total)
+			) ;end cond
 		) ; end mysteryHelper
-	(mysteryHelper n 0)
+	(mysteryHelper n 0) ;first call to mysteryHelper, initializes total as 0
 	) ; end mystery
 
 (define (run9)
 	(exprTest (mystery 2) 1.6666666667)
+	(inspect (mystery 50))
 	(inspect (mystery 1))
 	)
 
-;(run9)
+(run9)
 
 
 ;-----------------------------TASK 10--------------------------------
 
-(define (rama d x)
+(define (ramanujan d x)
 	(define (ramaHelper counter)
 		(cond
 			((= counter d) 1.0)
@@ -366,73 +362,56 @@
 			)
 		) ; end ramaHelper
 
-	(if(= d 0) 0
-		(ramaHelper 0)
+	(if(= d 0) ;special case
+		0
+		(ramaHelper 0) ;first call to ramaHelper
 		) ; end if
 	) ; end rama (recursive)
 
-; (define (irama d x)
-; 	(define total 1)
-; 	(if(= d 0) 0)
-; 	(define (ramaIter dep)
-; 		(cond
-; 			((= 0 dep) total)
-; 			(else 
-; 				total = (* total (sqrt(* (+ 1 (+ (- dep 1) x)) (ramaHelper (- 1 dep) ) )))
-; 				) ; end else
-; 			)
-; 		) ; end ramaHelper
-; 	(ramaHelper d)
+; iramanjan implements an iterative process because we keep track of a total and update
+; 	the total with each new pass!
 
-;	) ; end irama
-
-
-
-(define (irama d x)
-	
-	(define (iramaIter prod count max)
+(define (iramanujan d x)
+	(define (iramanujanIter total count)
 		(cond 
-			((= count max) 1 )
+			((= count 0) total )
 			(else 
-				(println "inside new prod sqrt : " (+ 1 (+ (- d (+ count 1)) x)))
-				(println "current prod at count " count " : " prod )
-				(* (iramaIter (sqrt(+ 1 (+ (- d (+ count 1)) x))) (+ count 1) max) prod)
+				(iramanujanIter (sqrt ( * total (+ 1 (+ (+ x (- count 1) ) ))) ) (- count 1)) 
 				) ;end else
 			) ;end cond
-		) ;end iramaIter
+		) ;end iramanujanIter
 
-
-	(if(= d 0) 
+	(if(= d 0) ;special case
 		0
-		(iramaIter 1.0 0 d)
+		(iramanujanIter 1.0 d) ;first call to iramanujanIter, starts total at 1 to avoid multiplying by 0!
 		) ; end if
 
-	; (cond
-	; 	((= d 0) (define y 1))
-	; 	(else   (define y (+ 1 (+ x (- d 1) ) ) ) (println "first value at d = " d " is " y )          
-	; 		( sqrt (* y (irama (- d 1) x) ) ) ) ;end else
-	; 	) ; end cond
-
-	) ; end irama
+	) ; end iramanujan (iterative)
 
 (define (run10)
-	(exprTest (irama 2 3) 2.99069756)
-	(exprTest (rama 0 3) 0)
-	(exprTest (rama 1 3) 2.0000000000)
-	(exprTest (rama 0 0) 0)
-	(exprTest (rama 0 1) 0)
-	(exprTest (rama 1 0) 1.0)
-	(exprTest (rama 1 1) 1.4142135624)
-	(exprTest (rama 1 2) 1.7320508076)
-	(exprTest (rama 2 2) 2.2360679775)
-	(exprTest (rama 3 3) 3.2951592364)
-	(exprTest (rama 7 4) 4.9198021247)
-	(exprTest (rama 6 11) 11.497813243)
-	(exprTest (rama 116 87) 88.000000000)
-	(exprTest (rama 116 11793) 11794.000000)
+	(exprTest (iramanujan 2 3) 2.9906975624)
+	(exprTest (iramanujan 0 3) 0)
+	(exprTest (iramanujan 1 3) 2.0000000000)
+	(exprTest (iramanujan 0 0) 0)
+	(exprTest (iramanujan 0 1) 0)
+	(exprTest (iramanujan 3 4) 4.463341015276)
+	(exprTest (iramanujan 1 0) 1.0)
+	(exprTest (iramanujan 1 1) 1.4142135624)
+	(exprTest (iramanujan 1 2) 1.7320508076)
+	(exprTest (iramanujan 116 87) 88.989004539)
+	(exprTest (iramanujan 116 11793) 11794.99991)
+	(exprTest (ramanujan 1 3) 2.0000000000)
+	(exprTest (ramanujan 0 0) 0)
+	(exprTest (ramanujan 0 1) 0)
+	(exprTest (ramanujan 3 4) 4.463341015276)
+	(exprTest (ramanujan 1 0) 1.0)
+	(exprTest (ramanujan 1 1) 1.4142135624)
+	(exprTest (ramanujan 1 2) 1.7320508076)
+	(exprTest (ramanujan 116 87) 88.989004539)
+	(exprTest (ramanujan 116 11793) 11794.999915)
 	)
 
-(run10)
+;(run10)
 
 
 
